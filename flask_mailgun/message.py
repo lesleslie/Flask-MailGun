@@ -7,6 +7,7 @@ Created on Thur Apr 20 13:56:10 2017
 mirror of the message class in flask_mail
 """
 from flask import current_app
+
 from .attachment import Attachment
 
 
@@ -33,23 +34,27 @@ class Message(object):
     :param rcpt_options:  A list of ESMTP options to be used in RCPT commands
     """
 
-    def __init__(self, subject='',
-                 recipients=None,
-                 body=None,
-                 html=None,
-                 alts=None,
-                 sender=None,
-                 cc=None,
-                 bcc=None,
-                 attachments=None,
-                 reply_to=None,
-                 date=None,
-                 charset=None,
-                 extra_headers=None,
-                 mail_options=None,
-                 rcpt_options=None):
+    def __init__(
+        self,
+        subject="",
+        recipients=None,
+        body=None,
+        html=None,
+        amp_html=None,
+        alts=None,
+        sender=None,
+        cc=None,
+        bcc=None,
+        attachments=None,
+        reply_to=None,
+        date=None,
+        charset=None,
+        extra_headers=None,
+        mail_options=None,
+        rcpt_options=None,
+    ):
 
-        sender = sender or current_app.extensions['mail'].default_sender
+        sender = sender or current_app.extensions["mail"].default_sender
 
         if isinstance(sender, tuple):
             sender = "{0} <{1}>".format(*sender)
@@ -63,6 +68,7 @@ class Message(object):
         self.body = body
         self.alts = dict(alts or {})
         self.html = html
+        self.amp_html = amp_html
         self.date = date
         self.charset = charset
         self.extra_headers = extra_headers
@@ -72,14 +78,14 @@ class Message(object):
 
     @property
     def html(self):
-        return self.alts.get('html')
+        return self.alts.get("html")
 
     @html.setter
     def html(self, value):
         if value is None:
-            self.alts.pop('html', None)
+            self.alts.pop("html", None)
         else:
-            self.alts['html'] = value
+            self.alts["html"] = value
 
     def send(self, connection):
         """Verifies and sends the message."""
@@ -93,12 +99,14 @@ class Message(object):
 
         self.recipients.append(recipient)
 
-    def attach(self,
-               filename=None,
-               content_type=None,
-               data=None,
-               disposition=None,
-               headers=None):
+    def attach(
+        self,
+        filename=None,
+        content_type=None,
+        data=None,
+        disposition=None,
+        headers=None,
+    ):
         """Adds an attachment to the message.
         :param filename: filename of attachment
         :param content_type: file mimetype
@@ -106,4 +114,5 @@ class Message(object):
         :param disposition: content-disposition (if any)
         """
         self.attachments.append(
-            Attachment(filename, content_type, data, disposition, headers))
+            Attachment(filename, content_type, data, disposition, headers)
+        )
