@@ -44,7 +44,7 @@ class MailGunAPI(object):
             "text": message.body,
             "html": message.html,
         }
-        if message.__dict__["amp_html"]:
+        if "amp_html" in message.__dict__.keys():
             message_data["amp-html"] = message.amp_html
         message_data = {k: v for k, v in message_data.items() if v is not None}
 
