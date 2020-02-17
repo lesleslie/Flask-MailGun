@@ -35,7 +35,7 @@ class MailGunAPI(object):
         :param message: Message instance.
         :param envelope_from: Email address to be used in MAIL FROM command.
         """
-        mesage_data = {
+        message_data = {
             "from": envelope_from or message.sender,
             "to": message.recipients,
             "subject": message.subject,
@@ -44,17 +44,17 @@ class MailGunAPI(object):
             "text": message.body,
             "html": message.html,
         }
-        if message.amp_html:
-            message["amp-html"] = message.amp_html
-        mesage_data = {k: v for k, v in mesage_data.items() if v is not None}
+        if message.__dict__["amp_html"]:
+            message_data["amp-html"] = message.amp_html
+        message_data = {k: v for k, v in message_data.items() if v is not None}
 
         files = [(a.disposition, (a.filename, a.data)) for a in message.attachments]
 
-        responce = requests.post(
-            self.sendpoint, auth=self.auth, data=mesage_data, files=files
+        resp = requests.post(
+            self.sendpoint, auth=self.auth, data=message_data, files=files
         )
-        responce.raise_for_status()
-        return responce
+        resp.raise_for_status()
+        return resp
 
     def send_message(self, *args, **kwargs):
         """Shortcut for send(msg).
