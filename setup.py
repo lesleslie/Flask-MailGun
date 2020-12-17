@@ -26,7 +26,7 @@ with open('README.rst', encoding='utf-8') as f:
 # requirements = parse_requirements('requirements.txt', session=False)
 # requirements = [str(ir.req) for ir in requirements]
 
-__NAME__ = 'Flask-MailGun3'
+__NAME__ = 'Flask-MailGun'
 __doc__ = readme
 __author__ = 'Amey-SAM'
 __license__ = 'MIT'
